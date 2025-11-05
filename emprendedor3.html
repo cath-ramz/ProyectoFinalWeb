@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hecho en NL – Emprendedor</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div data-include="header.html"></div>
+
+  <!-- Panel de categorías -->
+  <div id="categorias-container"></div>
+
+  <script>
+  (async () => {
+    // 1) Cargar fragmentos con data-include (header y footer)
+    const includes = document.querySelectorAll('[data-include]');
+    await Promise.all([...includes].map(async el => {
+      const file = el.getAttribute('data-include');
+      const res  = await fetch(file);
+      el.innerHTML = await res.text();
+    }));
+
+    // 2) Insertar categorias.html justo debajo del header
+    const catRes = await fetch('categorias.html');
+    const catHtml = await catRes.text();
+    document.getElementById('categorias-container').innerHTML = catHtml;
+
+    // 3) Cargar el JS de categorías y luego inicializar
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'categorias.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+
+    // 4) Iniciar comportamiento
+    if (typeof initCategorias === 'function') initCategorias();
+  })();
+  </script>
+
+  <main class="henl-main" role="main">
+
+    <!-- Breadcrumb -->
+    <nav class="crumbs" aria-label="Ruta">
+      <ol>
+        <li><a href="/home.html ">Principal</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="current">Grill Kong</li>
+      </ol>
+    </nav>
+
+    <!-- Hero del emprendedor -->
+    <section class="vendor-hero" aria-labelledby="vendor-title">
+      <div class="vendor-logo">
+        <img src="images/emprendedores/grill_kong.png" alt="Grill Kong">
+      </div>
+
+      <div class="vendor-info">
+        <h1 id="vendor-title" class="vendor-title">Grill Kong</h1>
+        <a class="vendor-link" href="#" aria-label="Ver más sobre Grill Kong">Sobre nosotros</a>
+
+        <div class="vendor-desc">
+          <p>
+            La marca nace en la pandemia y después cae en la bancarrota. Renace el día del padre del 2023 y desde entonces a la fecha ha sido un caso de éxito.
+          </p>
+          <p>
+            Ya en abril de 2025 hicimos nuestra primera exportación a Estados Unidos.
+          </p>
+        </div>
+
+        <!-- Cuadro: Síguenos en redes (alineado a la derecha en móvil y desktop) -->
+        <section class="vendor-social">
+          <h3>Síguenos en redes</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram">
+              <img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram">
+            </a>
+            <a href="#" aria-label="Facebook">
+              <img src="https://cdn-icons-png.flaticon.com/512/20/20673.png" alt="Facebook">
+            </a>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Carrusel de productos del emprendedor -->
+    <section id="vendor-products" class="carousel" aria-label="Productos de Del Huerto de Santiago">
+      <h2>Otros productos</h2>
+      <div class="carousel-container">
+        <a class="carousel-item" href="producto2.html" aria-label="Ver Licor Artesanal">
+            <img src="images/products/bebidas/Licor Artesanal Frontal.png" alt="Licor Artesanal">
+            <h3>Licor Artesanal</h3>
+            <h4>Del Huerto de Santiago</h4>
+            <p class="description">Licor artesanal con ingredientes naturales seleccionados.</p>
+            <p class="price">$250.00</p>
+        </a>
+
+
+        <a class="carousel-item" href="producto.html" aria-label="Ver Miel Abellamia">
+          <img src="images/products/Miel.png" alt="Miel">
+          <h3>Miel</h3>
+          <h4>Abellamia</h4>
+          <p class="description">Miel de flores de azahar, suave y natural.</p>
+          <p class="price">$79.00</p>
+        </a>
+
+        <a class="carousel-item" href="producto.html" aria-label="Ver Dark Chipotle">
+          <img src="images/products/Dark chipotle frente.png" alt="Dark Chipotle">
+          <h3>Dark Chipotle</h3>
+          <h4>Grill Kong</h4>
+          <p class="description">Sazonador de chipotle 100% natural.</p>
+          <p class="price">$60.00</p>
+        </a>
+
+        <a class="carousel-item" href="producto.html" aria-label="Ver Miel piquín">
+          <img src="images/products/Miel piquín.png" alt="Miel piquín">
+          <h3>Miel piquín</h3>
+          <h4>Grill Kong</h4>
+          <p class="description">Miel con piquín y especias.</p>
+          <p class="price">$220.00</p>
+        </a>
+
+        <a class="carousel-item" href="producto.html" aria-label="Ver Rollo de guayaba">
+          <img src="images/products/Rollo de guayaba.png" alt="Rollo de guayaba">
+          <h3>Rollo de guayaba</h3>
+          <h4>Dulces Finos Victoria</h4>
+          <p class="description">Dulce rollo artesanal de guayaba.</p>
+          <p class="price">$100.00</p>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <div data-include="footer.html"></div>
+
+  <!-- Fallback de includes -->
+  <script>
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      if (el.innerHTML.trim()) return;
+      try {
+        const file = el.getAttribute('data-include');
+        const res = await fetch(file);
+        el.innerHTML = await res.text();
+      } catch (e) {
+        el.innerHTML = '<p style="padding:1rem;color:#b00020">No se pudo cargar ' + file + '</p>';
+      }
+    });
+  </script>
+</body>
+</html>

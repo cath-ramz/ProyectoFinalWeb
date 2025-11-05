@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hecho en NL – Producto</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div data-include="header.html"></div>
+
+  <!-- Panel de categorías -->
+  <div id="categorias-container"></div>
+
+  <script>
+  (async () => {
+    const includes = document.querySelectorAll('[data-include]');
+    await Promise.all([...includes].map(async el => {
+      const file = el.getAttribute('data-include');
+      const res  = await fetch(file);
+      el.innerHTML = await res.text();
+    }));
+
+    const catRes = await fetch('categorias.html');
+    const catHtml = await catRes.text();
+    document.getElementById('categorias-container').innerHTML = catHtml;
+
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'categorias.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+
+    if (typeof initCategorias === 'function') initCategorias();
+  })();
+  </script>
+
+  <main class="henl-main" role="main">
+
+    <!-- Breadcrumb -->
+    <nav class="crumbs" aria-label="Ruta">
+      <ol>
+        <li><a href="/emprendedor3.html">Grill Kong</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="current">Ghost town</li>
+      </ol>
+    </nav>
+
+    <!-- ===== Layout de producto ===== -->
+    <section class="product-layout">
+      <!-- Columna principal -->
+      <div class="product-main">
+        <!-- Emprendedor -->
+        <section class="product-head">
+          <a href="/emprendedor.html">
+            <div class="seller">
+              <div class="seller__avatar">
+                <img src="images/emprendedores/grill_kong.png" alt="Grill kong">
+              </div>
+              <div class="seller__name">Grill kong</div>
+            </div>
+          </a>
+
+          <!-- Miniatura de ángulo (placeholder con la misma imagen) -->
+          <div class="product-angles" aria-label="Ángulos del producto">
+            <button class="angle-thumb is-active" type="button" data-src="images/products/Dark chipotle frente.png" aria-label="Ángulo principal">
+              <img src="images/products/Dark chipotle frente.png" alt="">
+            </button>
+            <button class="angle-thumb" type="button" data-src="images/products/Dark chipotle parte atras.png" aria-label="Vista trasera">
+              <img src="images/products/Dark chipotle parte atras.png" alt="">
+            </button>
+
+          </div>
+          
+        </section>
+
+        <!-- Hero: imagen + info (en desktop se muestra en dos columnas por CSS) -->
+        <section class="product-hero">
+          <!-- Imagen -->
+          <section class="product-media">
+            <img
+              id="main-product-img"
+              src="images/products/Dark chipotle frente.png"
+              alt="Ghost town – Grill kong"
+            />
+            <div class="media-dots" aria-hidden="true">
+              <span class="dot is-active"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </section>
+
+          <!-- Info -->
+          <section class="product-info">
+            <h1 class="product-title">Ghost town <span class="product-grams">/114g</span></h1>
+            <p class="product-price">$60.00</p>
+            <p class="product-desc">
+              Sazonador de chile Fantasma de la India.
+              Tiene un sabor afrutado; ideal en cortes de puerco,
+              carne con tocino o unos camarontacos con limón.
+              Contiene chile Fantasma importado de la India y especias.
+            </p>
+          </section>
+        </section>
+
+        <!-- Bloque: Síguenos en redes (aparece debajo de la info; alineado a la derecha en móvil por CSS) -->
+        <section class="product-social">
+          <h3>Síguenos en redes</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram">
+              <img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram">
+            </a>
+            <a href="#" aria-label="Facebook">
+              <img src="https://cdn-icons-png.flaticon.com/512/20/20673.png" alt="Facebook">
+            </a>
+          </div>
+        </section>
+
+      </div> <!-- /product-main -->
+    </section>
+    <!-- ===== Fin layout producto ===== -->
+
+    <!-- Carrusel recomendado -->
+    <section id="carousel-recommended" class="carousel">
+      <h2>Productos recomendados</h2>
+      <div class="carousel-container">
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Salsa Serrano">
+          <img src="images/products/Salsa Serrano.png" alt="Salsa Serrano">
+          <h3>Salsa Serrano</h3>
+          <h4>Cavazos</h4>
+          <p class="description">Salsa serrano 100% natural, sin conservantes.</p>
+          <p class="price">$65.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Chimichurri Mexicano">
+          <img src="images/products/Chimichurri Mexicano.png" alt="Chimichurri Mexicano">
+          <h3>Chimichurri Mexicano</h3>
+          <h4>Somos Sabores</h4>
+          <p class="description">Aderezo de chile de árbol.</p>
+          <p class="price">$120.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Miel piquín">
+          <img src="images/products/Miel piquín.png" alt="Miel piquín">
+          <h3>Miel piquín</h3>
+          <h4>Grill Kong</h4>
+          <p class="description">Miel con piquín ideal para carnes y postres.</p>
+          <p class="price">$220.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Dark Chipotle">
+          <img src="images/products/Dark chipotle frente.png" alt="Dark Chipotle">
+          <h3>Dark Chipotle</h3>
+          <h4>Grill Kong</h4>
+          <p class="description">Sazonador de chipotle 100% natural.</p>
+          <p class="price">$60.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Café de la Olla">
+          <img src="images/products/Café de la Olla.png" alt="Café de la Olla">
+          <h3>Café de la Olla</h3>
+          <h4>Fússia</h4>
+          <p class="description">Molido con canela y piloncillo.</p>
+          <p class="price">$330.00</p>
+        </a>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <div data-include="footer.html"></div>
+
+  <!-- Fallback de includes si algo falla -->
+  <script>
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      if (el.innerHTML.trim()) return;
+      try {
+        const file = el.getAttribute('data-include');
+        const res = await fetch(file);
+        el.innerHTML = await res.text();
+      } catch (e) {
+        el.innerHTML = '<p style="padding:1rem;color:#b00020">No se pudo cargar ' + file + '</p>';
+      }
+    });
+  </script>
+</body>
+</html>

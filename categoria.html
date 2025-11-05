@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hecho en NL – Categoría</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div data-include="header.html"></div>
+
+  <!-- Panel de categorías -->
+  <div id="categorias-container"></div>
+
+  <script>
+  (async () => {
+    // 1) Incluir header/footer
+    const includes = document.querySelectorAll('[data-include]');
+    await Promise.all([...includes].map(async el => {
+      const file = el.getAttribute('data-include');
+      const res  = await fetch(file);
+      el.innerHTML = await res.text();
+    }));
+
+    // 2) Insertar categorías
+    const catRes = await fetch('categorias.html');
+    const catHtml = await catRes.text();
+    document.getElementById('categorias-container').innerHTML = catHtml;
+
+    // 3) Cargar JS de categorías y luego inicializar
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'categorias.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+
+    // 4) Iniciar
+    if (typeof initCategorias === 'function') initCategorias();
+  })();
+  </script>
+
+  <main class="henl-main" role="main">
+
+    <!-- Breadcrumb -->
+    <nav class="crumbs" aria-label="Ruta">
+      <ol>
+        <li><a href="#">Alimentos</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="current">Salsas</li>
+      </ol>
+    </nav>
+
+    <!-- ===== Layout categoría ===== -->
+    <section class="category-layout">
+
+      <!-- Columna principal -->
+      <div class="category-main">
+
+        <!-- Controles (ordenamiento) -->
+        <details class="sort" role="list">
+          <summary class="sort__btn">Ordenar por:</summary>
+          <div class="sort__menu" role="listbox" aria-label="Opciones de orden">
+            <label class="sort__opt">
+              <input type="radio" name="sort" checked>
+              <span>Relevancia</span>
+            </label>
+            <label class="sort__opt">
+              <input type="radio" name="sort">
+              <span>Precio: de Menor a Mayor</span>
+            </label>
+            <label class="sort__opt">
+              <input type="radio" name="sort">
+              <span>Precio: de Mayor a Menor</span>
+            </label>
+            <label class="sort__opt">
+              <input type="radio" name="sort">
+              <span>Más Reciente</span>
+            </label>
+          </div>
+        </details>
+
+        <!-- Lista de productos -->
+        <section class="cat-list" aria-label="Productos en Salsas">
+
+          <a class="cat-item" href="producto.html" aria-label="Ver Salsa Serrano de Cavazos">
+            <figure class="cat-item__thumb">
+              <img src="images/products/Salsa Serrano.png" alt="Salsa Serrano">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Salsa Serrano</h3>
+              <p class="cat-item__brand">Cavazos</p>
+              <p class="cat-item__price">$65.00</p>
+            </div>
+          </a>
+
+          <a class="cat-item" href="producto.html" aria-label="Ver Chimichurri Mexicano">
+            <figure class="cat-item__thumb">
+              <img src="images/products/Chimichurri Mexicano.png" alt="Chimichurri Mexicano">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Chimichurri Mexicano</h3>
+              <p class="cat-item__brand">Somos Sabores</p>
+              <p class="cat-item__price">$120.00</p>
+            </div>
+          </a>
+
+          <a class="cat-item" href="producto.html" aria-label="Ver Ghost town">
+            <figure class="cat-item__thumb">
+              <img src="images/products/Dark chipotle frente.png" alt="Ghost town">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Ghost town</h3>
+              <p class="cat-item__brand">Grill Kong</p>
+              <p class="cat-item__price">$60.00</p>
+            </div>
+          </a>
+
+          <a class="cat-item" href="producto.html" aria-label="Ver Miel piquín">
+            <figure class="cat-item__thumb">
+              <img src="images/products/Miel piquín.png" alt="Miel piquín">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Miel piquín</h3>
+              <p class="cat-item__brand">Grill Kong</p>
+              <p class="cat-item__price">$220.00</p>
+            </div>
+          </a>
+
+          <a class="cat-item" href="producto.html" aria-label="Ver Rollo de guayaba">
+            <figure class="cat-item__thumb">
+              <img src="images/products/Rollo de guayaba.png" alt="Rollo de guayaba">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Rollo de guayaba</h3>
+              <p class="cat-item__brand">Dulces Finos Victoria</p>
+              <p class="cat-item__price">$100.00</p>
+            </div>
+          </a>
+
+        </section>
+      </div>
+
+    </section><!-- /category-layout -->
+
+  </main>
+
+  <!-- Footer -->
+  <div data-include="footer.html"></div>
+
+  <!-- Fallback de includes -->
+  <script>
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      if (el.innerHTML.trim()) return;
+      try {
+        const file = el.getAttribute('data-include');
+        const res = await fetch(file);
+        el.innerHTML = await res.text();
+      } catch (e) {
+        el.innerHTML = '<p style="padding:1rem;color:#b00020">No se pudo cargar ' + file + '</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>

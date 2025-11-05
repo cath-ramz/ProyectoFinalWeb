@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hecho en NL – Categoría (Bebidas)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div data-include="header.html"></div>
+
+  <!-- Panel de categorías -->
+  <div id="categorias-container"></div>
+
+  <script>
+  (async () => {
+    // 1) Incluir header/footer
+    const includes = document.querySelectorAll('[data-include]');
+    await Promise.all([...includes].map(async el => {
+      const file = el.getAttribute('data-include');
+      const res  = await fetch(file);
+      el.innerHTML = await res.text();
+    }));
+
+    // 2) Insertar categorías
+    const catRes = await fetch('categorias.html');
+    const catHtml = await catRes.text();
+    document.getElementById('categorias-container').innerHTML = catHtml;
+
+    // 3) Cargar JS de categorías y luego inicializar
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'categorias.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+
+    // 4) Iniciar
+    if (typeof initCategorias === 'function') initCategorias();
+  })();
+  </script>
+
+  <main class="henl-main" role="main">
+
+    <!-- Breadcrumb -->
+    <nav class="crumbs" aria-label="Ruta">
+      <ol>
+        <li><a href="#">Bebidas</a></li>
+        <li aria-hidden="true">›</li>
+        <li class="current">Todas</li>
+      </ol>
+    </nav>
+
+    <!-- ===== Layout categoría ===== -->
+    <section class="category-layout">
+      <div class="category-main">
+
+        <!-- Controles de orden -->
+        <details class="sort" role="list">
+          <summary class="sort__btn">Ordenar por:</summary>
+          <div class="sort__menu" role="listbox" aria-label="Opciones de orden">
+            <label class="sort__opt"><input type="radio" name="sort" checked><span>Relevancia</span></label>
+            <label class="sort__opt"><input type="radio" name="sort"><span>Precio: de Menor a Mayor</span></label>
+            <label class="sort__opt"><input type="radio" name="sort"><span>Precio: de Mayor a Menor</span></label>
+            <label class="sort__opt"><input type="radio" name="sort"><span>Más Reciente</span></label>
+          </div>
+        </details>
+
+        <!-- Lista de productos (solo una imagen por producto) -->
+        <section class="cat-list" aria-label="Productos en Bebidas">
+
+          <!-- Licor Artesanal -->
+          <a class="cat-item" href="producto2.html" aria-label="Ver Licor Artesanal">
+            <figure class="cat-item__thumb">
+              <img src="images/products/bebidas/Licor Artesanal Frontal.png" alt="Licor Artesanal">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Licor Artesanal</h3>
+              <p class="cat-item__brand">Del Huerto de Santiago</p>
+              <p class="cat-item__price">$250.00</p>
+            </div>
+          </a>
+
+          <!-- Café -->
+          <a class="cat-item" href="producto.html" aria-label="Ver Café de la Olla">
+            <figure class="cat-item__thumb">
+              <img src="images/products/bebidas/Café lateral.png" alt="Café de la Olla">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Café de la Olla</h3>
+              <p class="cat-item__brand">Fússia</p>
+              <p class="cat-item__price">$330.00</p>
+            </div>
+          </a>
+
+          <!-- Azahar -->
+          <a class="cat-item" href="producto.html" aria-label="Ver Azahar">
+            <figure class="cat-item__thumb">
+              <img src="images/products/bebidas/azahar.png" alt="Azahar">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Azahar</h3>
+              <p class="cat-item__brand">Abellamia</p>
+              <p class="cat-item__price">$90.00</p>
+            </div>
+          </a>
+
+          <!-- Estuche 3 Mini Botellas -->
+          <a class="cat-item" href="producto.html" aria-label="Ver Estuche 3 Mini Botellas">
+            <figure class="cat-item__thumb">
+              <img src="images/products/bebidas/Estuche 3 Mini Botellas.png" alt="Estuche 3 Mini Botellas">
+            </figure>
+            <div class="cat-item__body">
+              <h3 class="cat-item__title">Estuche 3 Mini Botellas</h3>
+              <p class="cat-item__brand">Del Huerto de Santiago</p>
+              <p class="cat-item__price">$320.00</p>
+            </div>
+          </a>
+
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <div data-include="footer.html"></div>
+
+  <!-- Fallback de includes -->
+  <script>
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      if (el.innerHTML.trim()) return;
+      try {
+        const file = el.getAttribute('data-include');
+        const res = await fetch(file);
+        el.innerHTML = await res.text();
+      } catch (e) {
+        el.innerHTML = '<p style="padding:1rem;color:#b00020">No se pudo cargar ' + file + '</p>';
+      }
+    });
+  </script>
+</body>
+</html>

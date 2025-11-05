@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hecho en NL – Prueba de Header</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Aquí se inyectará header.html -->
+  <div data-include="header.html"></div>
+
+  <!-- Inserta el panel de categorías -->
+    <div id="categorias-container"></div>
+
+    <script>
+    (async () => {
+    // 1) Cargar fragmentos con data-include (header y footer)
+    const includes = document.querySelectorAll('[data-include]');
+    await Promise.all([...includes].map(async el => {
+        const file = el.getAttribute('data-include');
+        const res  = await fetch(file);
+        el.innerHTML = await res.text();
+    }));
+
+    // 2) Insertar categorias.html justo debajo del header
+    const catRes = await fetch('categorias.html');
+    const catHtml = await catRes.text();
+    document.getElementById('categorias-container').innerHTML = catHtml;
+
+    // 3) Cargar el JS de categorías y luego inicializar
+    await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'categorias.js';
+        s.onload = resolve;
+        s.onerror = reject;
+        document.body.appendChild(s);
+    });
+
+    // 4) Iniciar comportamiento (ahora sí ya existen .henl-menu y #categories-panel)
+    initCategorias();
+    })();
+    </script>
+
+
+
+  <main class="henl-main" role="main">
+    <section class="demo">
+      <h1>Contenido de prueba</h1>
+      <p>Si ves el header arriba con fondo naranja, logo, buscador y menú, todo está OK.</p>
+      <p>Reemplaza los archivos <code>images/logo-henl.svg</code>, <code>images/icon-search.svg</code> e <code>images/icon-menu.svg</code> por los tuyos.</p>
+    </section>
+  </main>
+  <!-- Aquí se inyectará el footer -->
+    <div data-include="footer.html"></div>
+
+
+  <script>
+    // Carga simple de fragmentos HTML (para probar localmente sin framework)
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      try {
+        const file = el.getAttribute('data-include');
+        const res = await fetch(file);
+        el.innerHTML = await res.text();
+      } catch (e) {
+        el.innerHTML = '<p style="padding:1rem;color:#b00020">No se pudo cargar ' + file + '</p>';
+      }
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hecho en NL – Categoría</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <div data-include="header.html"></div>
+
+  <!-- Panel de categorías -->
+  <div id="categorias-container"></div>
+
+  <script>
+  (async () => {
+    // 1) Incluir header/footer
+    const includes = document.querySelectorAll('[data-include]');
+    await Promise.all([...includes].map(async el => {
+      const file = el.getAttribute('data-include');
+      const res  = await fetch(file);
+      el.innerHTML = await res.text();
+    }));
+
+    // 2) Insertar categorías
+    const catRes = await fetch('categorias.html');
+    const catHtml = await catRes.text();
+    document.getElementById('categorias-container').innerHTML = catHtml;
+
+    // 3) Cargar JS de categorías y luego inicializar
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'categorias.js';
+      s.onload = resolve;
+      s.onerror = reject;
+      document.body.appendChild(s);
+    });
+
+    // 4) Iniciar
+    if (typeof initCategorias === 'function') initCategorias();
+  })();
+  </script>
+
+  <main class="henl-main" role="main">
+
+    <!-- Breadcrumb -->
+    <nav class="crumbs" aria-label="Ruta">
+      <ol>
+        <li><a href="/home.html">Alimentos</a>
+        </li>
+      </ol>
+    </nav>
+
+    <!-- ===== Layout subcategoría ===== -->
+    <section id="home-subcategories" class="home-subcats" aria-label="Subcategorías">
+      <div class="home-subcats__wrap">
+        <div class="home-cats__grid">
+
+          <a href="categoria.html" class="home-subcat">
+            <h2>Salsas</h2>
+            <div class="home-subcat__media">
+              <img src="images/categories/subcategories/Salsas.png" alt="Salsas">
+            </div>
+          </a>
+
+          <a href="subcategoria.html" class="home-subcat">
+            <h2>Dulces Artesanales</h2>
+            <div class="home-subcat__media">
+              <img src="images/categories/subcategories/Dulces Artesanales.png" alt="Dulces">
+            </div>
+          </a>
+          <a href="subcategoria.html" class="home-subcat">
+            <h2>Endulzantes</h2>
+            <div class="home-subcat__media">
+              <img src="images/categories/subcategories/Endulzantes.png" alt="Endulzantes">
+            </div>
+          </a>
+          <a href="subcategoria.html" class="home-subcat">
+            <h2>Condimentos</h2>
+            <div class="home-subcat__media">
+              <img src="images/categories/subcategories/Condimentos.png" alt="Condimentos">
+            </div>
+          </a>
+
+
+
+        </div>
+      </div>
+        </section>
+
+
+    <!-- Carrusel recomendado -->
+    <section id="carousel-recommended" class="carousel">
+      <h2>Productos recomendados</h2>
+      <div class="carousel-container">
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Salsa Serrano">
+          <img src="images/products/Salsa Serrano.png" alt="Salsa Serrano">
+          <h3>Salsa Serrano</h3>
+          <h4>Cavazos</h4>
+          <p class="description">Salsa serrano 100% natural, sin conservantes.</p>
+          <p class="price">$65.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Chimichurri Mexicano">
+          <img src="images/products/Chimichurri Mexicano.png" alt="Chimichurri Mexicano">
+          <h3>Chimichurri Mexicano</h3>
+          <h4>Somos Sabores</h4>
+          <p class="description">Aderezo de chile de árbol.</p>
+          <p class="price">$120.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Miel piquín">
+          <img src="images/products/Miel piquín.png" alt="Miel piquín">
+          <h3>Miel piquín</h3>
+          <h4>Grill Kong</h4>
+          <p class="description">Miel con piquín ideal para carnes y postres.</p>
+          <p class="price">$220.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Dark Chipotle">
+          <img src="images/products/Dark chipotle frente.png" alt="Dark Chipotle">
+          <h3>Dark Chipotle</h3>
+          <h4>Grill Kong</h4>
+          <p class="description">Sazonador de chipotle 100% natural.</p>
+          <p class="price">$60.00</p>
+        </a>
+
+        <a href="producto.html" class="carousel-item" aria-label="Ver Café de la Olla">
+          <img src="images/products/Café de la Olla.png" alt="Café de la Olla">
+          <h3>Café de la Olla</h3>
+          <h4>Fússia</h4>
+          <p class="description">Molido con canela y piloncillo.</p>
+          <p class="price">$330.00</p>
+        </a>
+
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- Footer -->
+  <div data-include="footer.html"></div>
+
+  <!-- Fallback de includes -->
+  <script>
+    document.querySelectorAll('[data-include]').forEach(async el => {
+      if (el.innerHTML.trim()) return;
+      try {
+        const file = el.getAttribute('data-include');
+        const res = await fetch(file);
+        el.innerHTML = await res.text();
+      } catch (e) {
+        el.innerHTML = '<p style="padding:1rem;color:#b00020">No se pudo cargar ' + file + '</p>';
+      }
+    });
+  </script>
+
+</body>
+</html>
